@@ -56,7 +56,7 @@ void	Config::fileValidator()
 void	Config::parse_server()
 {
 	size_t i = 0;
-	std::string to_find = ;
+	size_t counter = 1;
 
 	while (i < _content.length())
 	{
@@ -70,7 +70,7 @@ void	Config::parse_server()
 			i++;
 
 		pos = i;
-		size_t counter = 1;
+		counter = 1;
 		while (counter && _content[i]) 
 		{
 			if (_content[i] == '{')

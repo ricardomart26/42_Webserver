@@ -2,7 +2,7 @@
 #define CONFIG_HPP
 
 #include "ServerBlock.hpp"
-#include "MyFile.hpp"
+#include "FileWrapper.hpp"
 
 #include <string>
 #include <cstdlib>
