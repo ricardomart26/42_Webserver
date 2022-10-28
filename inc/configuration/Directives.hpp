@@ -51,7 +51,7 @@ class ServerName : public Directives
 
 		void				action(const std::string &value, t_context context);
 		void				print_content() const;
-		const std::string	&getValue(size_t i) const;
+		const std::string	&get_value(size_t i) const;
 
 	private:
 
@@ -68,7 +68,7 @@ class Root : public Directives
 
 		void	action(const std::string &value, t_context context);
 		void	print_content() const;
-		const std::string	&getValue() const;
+		const std::string	&get_value() const;
 
 		class TooManyRoot : public std::exception
 		{
@@ -176,7 +176,7 @@ class ListenIndv
 			}
 		};
 
-		const std::pair<std::string, int>	&getValue() const;
+		const std::pair<std::string, int>	&get_value() const;
 
 	private:
 
@@ -192,6 +192,7 @@ class Listen : public Directives
 {
 	public:
 		Listen(t_context context);
+		
 		~Listen()
 		{
 			std::vector<ListenIndv*>::iterator it = _l.begin();
@@ -199,9 +200,19 @@ class Listen : public Directives
 				delete *it;
 		}
 
-		void	action(const std::string &value, t_context context);
-		void	print_content() const;
-		ListenIndv *getListenIndv(size_t i) const;
+		class ListenBlockEqual : public std::exception
+		{
+			const char *what() const throw()
+			{
+				return ("Two listens with port and address equal"); 
+			}
+		};
+
+
+		void		check_dup_listen_directives();
+		void		action(const std::string &value, t_context context);
+		void		print_content() const;
+		ListenIndv	*get_listen_indv(size_t i) const;
 
 	private:
 
@@ -235,7 +246,7 @@ class Index : public Directives
 
 		void	action(const std::string &value, t_context context);
 		void	print_content() const;
-		const std::vector<std::string>	&getValue() const;
+		const std::vector<std::string>	&get_value() const;
 
 	private:
 

@@ -3,7 +3,7 @@
 /** @brief Creates new server block. This is hardcoded,
  * we should get this from the configuration file */
 ServerBlock::ServerBlock(const std::string &cont)
-	: _content(cont), _separator(' '), _end(';'), _autoIndex(false) {}
+	: _content(cont), _separator(' '), _end(";"), _autoIndex(false) {}
 
 void	ServerBlock::parseFile()
 {
@@ -36,6 +36,7 @@ void	ServerBlock::parseFile()
 		else
 			_m[value]->action(slice_str(_content, _end, ++i), SERVER);
 	}
+	dynamic_cast<Listen *>(_m["listen"])->check_dup_listen_directives();
 }
 
 const std::vector<Location*>	&ServerBlock::getLocation() const
@@ -69,5 +70,3 @@ ServerBlock::ServerBlock(const ServerBlock &cpy)
 	_end = cpy._end;
 	_separator = cpy._separator;
 }
-
-

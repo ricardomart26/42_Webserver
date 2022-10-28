@@ -46,7 +46,7 @@ class ServerBlock
 		std::string							_content;
 		std::map<std::string, Directives*>	_m;
 		char								_separator;
-		char								_end;
+		std::string							_end;
 		std::vector<Location *>				_locations;
 		bool								_autoIndex;
 };

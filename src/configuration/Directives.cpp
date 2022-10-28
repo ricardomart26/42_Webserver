@@ -25,7 +25,7 @@ void	ServerName::print_content() const
 	std::cout << "\n";
 }
 
-const std::string	&ServerName::getValue(size_t i) const
+const std::string	&ServerName::get_value(size_t i) const
 {
 	return (_value[i]);
 }
@@ -55,7 +55,7 @@ void	Root::print_content() const
 	std::cout << "\nroot: " << _value << std::endl;
 }
 
-const std::string	&Root::getValue() const
+const std::string	&Root::get_value() const
 {
 	return (_value);
 }
@@ -190,8 +190,26 @@ void	Listen::action(const std::string &value, t_context context)
 		if (_context != context)
 			throw badContext();
 	}
-	std::cout << "value is: " << value << std::endl;
+	// std::cout << "value is: " << value << std::endl;
 	_l.push_back(new ListenIndv(split(value, SPACES)));
+	std::cout << _l.size() << std::endl;
+
+}
+
+void	Listen::check_dup_listen_directives()
+{
+	std::cout << _l.size() << std::endl;
+	for (size_t i = 0; i < _l.size(); i++)
+	{
+		const std::pair<std::string, int>	temp = _l[i]->get_value();
+		for (size_t x = i + 1; x < _l.size(); x++)
+		{
+			std::cout << i << std::endl;
+			const std::pair<std::string, int>	temp2 = _l[x]->get_value();
+			if (temp.first == temp2.first && temp.first == temp2.first)
+				throw ListenBlockEqual();
+		}
+	}
 }
 
 void	Listen::print_content() const {}
@@ -238,7 +256,7 @@ ListenIndv::ListenIndv(const std::vector<std::string> &split)
 
 }
 
-ListenIndv *Listen::getListenIndv(size_t i) const
+ListenIndv *Listen::get_listen_indv(size_t i) const
 {
 	std::cout << _l.size() << std::endl;
 	std::cout << i << std::endl;
@@ -294,7 +312,7 @@ void	ListenIndv::handle_port(const std::string &port)
 		throw ListenPortNotValid();
 }
 
-const std::pair<std::string, int>	&ListenIndv::getValue() const
+const std::pair<std::string, int>	&ListenIndv::get_value() const
 {
 	return (_value);
 }
@@ -368,7 +386,7 @@ void	Index::print_content() const
 	std::cout << "\n";
 }
 
-const std::vector<std::string>	&Index::getValue() const
+const std::vector<std::string>	&Index::get_value() const
 {
 	return (_value);
 }

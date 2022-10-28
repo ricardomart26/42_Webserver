@@ -3,7 +3,7 @@ NAME = server
 CC = c++ -Wall -Wextra -Werror -std=c++98 -pedantic -fsanitize=address -g
 
 SRCDIR = src/
-INCDIR = inc/
+INCDIR = inc
 
 
 SRCS =	main.cpp $(shell find $(SRCDIR) -name '*.cpp')
@@ -19,7 +19,7 @@ INC =	$(shell find $(INCDIR) -name '*.hpp')
 all: $(NAME)
 
 $(NAME): $(SRCS) $(INC)
-	$(CC) $(SRCS) -I$(INCDIR) -o $(NAME)
+	$(CC) $(SRCS) -I$(INCDIR)/configuration -I$(INCDIR)/utils -o $(NAME)
 
 exec:
 	$(NAME)
