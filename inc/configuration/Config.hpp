@@ -3,11 +3,10 @@
 
 #include "ServerBlock.hpp"
 #include "FileWrapper.hpp"
-
+#include "InfoConfig.hpp"
 #include <string>
 #include <cstdlib>
 
-class MyFile;
 class ServerBlock;
 
 class Config
@@ -16,16 +15,15 @@ class Config
 		Config(const char *filename);
 		~Config();
 
-		void	fileValidator();
-		void	removeEmptyNewLines();
-		void	parse_server();
-		bool	invalidEndOfLine();
-		bool	invalidBrackets();
-		bool	isContext(int index);
-		bool	isDirectives(int index);
+		void	remove_empty_new_lines();
+		void	parse_server_block();
+		bool	invalid_end_of_line();
+		bool	invalid_brackets();
+		bool	is_context(int index);
+		bool	is_directives(int index);
 
-		ServerBlock	*getServerBlock(size_t i);
-		std::vector<ServerBlock*>	&getServerBlockVec();
+		ServerBlock	*get_server_block(size_t i);
+		std::vector<ServerBlock*>	&get_server_block_vec();
 
 		class ConfigCheckEndLine : public std::exception
 		{
@@ -40,8 +38,9 @@ class Config
 	private:
 
 		std::string					_content;
-		MyFile						_file;
+		FileWrapper					_file;
 		std::vector<ServerBlock *>	_server_block;
+		InfoConfig					_confInfo;
 };
 
 #endif

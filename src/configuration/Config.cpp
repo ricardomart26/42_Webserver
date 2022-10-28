@@ -5,29 +5,39 @@
 /** @brief Receives a configuration file, see if file exists, 
  * and parse the file to pass information to the server */
 Config::Config(const char *filename)
-: _file(200), _checker()
+: _file(200)
 {
 	_file.open(filename);
 	_file.read();
 	_content = _file.get_content();
+
+	remove_empty_new_lines();
+
+	if (invalid_end_of_line())
+		throw ConfigCheckEndLine();
+	if (invalid_brackets())
+		throw ConfigCheckOpenings();
+	parse_server_block();
 }
 
-ServerBlock	*Config::getServerBlock(size_t i)
+ServerBlock	*Config::get_server_block(size_t i)
 {
 	if (i >= _server_block.size())
 		return (NULL);
 	return (_server_block[i]);
 }
 
-std::vector<ServerBlock*>	&Config::getServerBlockVec()
+std::vector<ServerBlock*>	&Config::get_server_block_vec()
 {
 	return (_server_block);
 }
 
-
-void	Config::removeEmptyNewLines()
+/** 
+ * @brief Removes every empty new line with or without spaces.
+*/
+void	Config::remove_empty_new_lines()
 {
-	erase_while_is(_content, '\n');
+	erase_while_is_equal(_content, '\n');
 	int index = _content.length();
 	while (index > 0)
 	{
@@ -44,47 +54,41 @@ void	Config::removeEmptyNewLines()
 	}
 }
 
-void	Config::fileValidator()
-{
-
-	if (invalidEndOfLine())
-		throw ConfigCheckEndLine();
-	if (invalidBrackets())
-		throw ConfigCheckOpenings();
-}
-
-void	Config::parse_server()
+/**
+ * @brief Finds every server block in the config file, and constructs every serverBlock class for each server context found
+ * and addes them to a vector.
+*/
+void	Config::parse_server_block()
 {
 	size_t i = 0;
-	size_t counter = 1;
+	int pos = 0;
 
-	while (i < _content.length())
+	while (i < _content.length() && (pos = _content.find("server", i)) != -1)
 	{
-		int pos = _content.find("server", i);
-		if (pos == -1)
-			break ;
-		
-		i = pos + 6;
-		
-		while (!isalpha(_content[i]))
-			i++;
+		// Find returns the position of the beginning of the word, so we need to advance the "server" word
+		pos += 6;
+		while (!isalpha(_content[pos]))
+			pos++;
 
-		pos = i;
-		counter = 1;
-		while (counter && _content[i]) 
+		i = pos;
+		std::cout << i << std::endl;
+		for (size_t counter = 1; counter && _content[i]; i++) 
 		{
 			if (_content[i] == '{')
 				counter++;
 			else if (_content[i] == '}')
 				counter--;
-			i++;
 		}
 		_server_block.push_back(new ServerBlock(_content.substr(pos, i - pos - 1)));
 		_server_block[_server_block.size() - 1]->parseFile();
 	}
 }
 
-int Config::invalidEndOfLine()
+/**
+ * @brief checks if end of line finishes with ';' or '{' and if the directive 
+ * or context exists!
+*/
+bool	Config::invalid_end_of_line()
 {
 	int index = _content.length() - 1;
 	while (index > -1)
@@ -96,46 +100,27 @@ int Config::invalidEndOfLine()
 
 			if (_content[index] == ';')
 			{
-				if (!isDirectives(index - 1))
-					return (1);
+				if (!is_directives(index - 1))
+					return (true);
 			}
 			else if (_content[index] == '{')
 			{
-				if (!isContext(index - 1))
-					return (1);
+				if (!is_context(index - 1))
+					return (true);
 				index--;
 			}
 			continue ;
 		}
 		index--;
 	}
-	return (0);
-}
-
-bool	Config::invalidBrackets()
-{
-	int open = 0;
-	int close = 0;
-	int index = 0;
-
-	while (_content[index])
-	{
-		if (_content[index] == '{')
-			open++;
-		else if (_content[index] == '}')
-		{
-			if (open <= close)
-				return (true);
-			close++;
-		}
-		index++;
-	}
-	if (open != close)
-		return (true);
 	return (false);
 }
 
-bool	Config::isContext(int index)
+
+/**
+ * @brief 
+*/
+bool	Config::is_context(int index)
 {
 	while (index > 0 && _content[index] != ';')
 		index--;
@@ -159,7 +144,7 @@ bool	Config::isContext(int index)
 	return (0);
 }
 
-bool	Config::isDirectives(int index)
+bool	Config::is_directives(int index)
 {
 	while (index - 1 > 0 && (_content[index - 1] != ';' && 
 	_content[index - 1] != '{' && _content[index - 1] != '}'))
@@ -181,10 +166,32 @@ bool	Config::isDirectives(int index)
 	return (false);
 }
 
+bool	Config::invalid_brackets()
+{
+	int open = 0;
+	int close = 0;
+	int index = 0;
 
+	while (_content[index])
+	{
+		if (_content[index] == '{')
+			open++;
+		else if (_content[index] == '}')
+		{
+			if (open <= close)
+				return (true);
+			close++;
+		}
+		index++;
+	}
+	if (open != close)
+		return (true);
+	return (false);
+}
 
 Config::~Config() 
 {
 	for (size_t i = 0; i < _server_block.size(); i++)
 		delete _server_block[i];
 }
+
