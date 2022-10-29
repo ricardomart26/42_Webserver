@@ -32,14 +32,18 @@ class FileWrapper {
 		size_t				get_max_size() const;
 		size_t				size() const;
 
-		class FileNotFound : public std::exception {
-				const char *what() const throw() {
+		class FileNotFound : public std::exception
+		{
+				const char *what() const throw()
+				{
 					return ("File not Found");
 				}
 		};
 
-		class FileReadError : public std::exception {
-				const char *what() const throw() {
+		class FileReadError : public std::exception
+		{
+				const char *what() const throw()
+				{
 					return ("File read error");
 				}
 		};

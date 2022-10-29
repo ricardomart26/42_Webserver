@@ -15,12 +15,6 @@ class Config
 		Config(const char *filename);
 		~Config();
 
-		void	remove_empty_new_lines();
-		void	parse_server_block();
-		bool	invalid_end_of_line();
-		bool	invalid_brackets();
-		bool	is_context(int index);
-		bool	is_directives(int index);
 
 		ServerBlock	*get_server_block(size_t i);
 		std::vector<ServerBlock*>	&get_server_block_vec();
@@ -36,6 +30,13 @@ class Config
 		};
 
 	private:
+
+		bool	is_context(int index);
+		bool	is_directives(int index);
+		void	remove_empty_new_lines();
+		void	parse_server_block();
+		bool	invalid_end_of_line();
+		bool	invalid_brackets();
 
 		std::string					_content;
 		FileWrapper					_file;

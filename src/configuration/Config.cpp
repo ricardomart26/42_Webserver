@@ -118,7 +118,10 @@ bool	Config::invalid_end_of_line()
 
 
 /**
- * @brief 
+ * @brief when it gets a '{':
+ * 	1. Goes until ';' or begining of the file
+ * 	2. Substring of word,  
+ * 	3. Checks if the word is one of the words inside context (including limit_except).
 */
 bool	Config::is_context(int index)
 {
@@ -130,7 +133,7 @@ bool	Config::is_context(int index)
 
 	int save_index = index;
 
-	while (_content[save_index] &&  !isspace(_content[save_index]))
+	while (_content[save_index] && !isspace(_content[save_index]))
 		save_index++;
 
 	std::string sub = _content.substr(index, save_index - index);
@@ -144,6 +147,10 @@ bool	Config::is_context(int index)
 	return (0);
 }
 
+/**
+ * @brief when it gets a ';' goes until ';' or begining of the file or '{' or '}', after that it goes to the next word, 
+ * and sees if the word is one of the words inside the directives (excluding limit_except).
+*/
 bool	Config::is_directives(int index)
 {
 	while (index - 1 > 0 && (_content[index - 1] != ';' && 
@@ -166,6 +173,10 @@ bool	Config::is_directives(int index)
 	return (false);
 }
 
+
+/**
+ * @brief 
+*/
 bool	Config::invalid_brackets()
 {
 	int open = 0;

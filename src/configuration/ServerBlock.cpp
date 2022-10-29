@@ -3,12 +3,8 @@
 /** @brief Creates new server block. This is hardcoded,
  * we should get this from the configuration file */
 ServerBlock::ServerBlock(const std::string &cont)
-	: _content(cont), _separator(' '), _end(";"), _autoIndex(false) {}
-
-void	ServerBlock::parseFile()
+	: _content(cont), _separator(' '), _end(";"), _autoIndex(false)
 {
-	InfoConfig confInfo;
-
 	_m["server_name"] = new ServerName(SERVER);
 	_m["index"] = new Index(GLOBAL); // Ainda nao encontrei a doc do index
 	_m["error_page"] = new ErrorPage(GLOBAL);
@@ -16,6 +12,14 @@ void	ServerBlock::parseFile()
 	_m["listen"] = new Listen(SERVER); // Do listen function
 	_m["client_max_body_size"] = new ClientMaxBodySize(GLOBAL); //
 	_m["limit_except"] = new LimitExcept(LOCATION);
+}
+
+/**
+ * @brief 
+*/
+void	ServerBlock::parseFile()
+{
+	InfoConfig confInfo;
 
 	for (size_t i = 0; _content[i]; i++)
 	{
@@ -23,12 +27,12 @@ void	ServerBlock::parseFile()
 			i++;
 
 		std::string value = slice_str(_content, SPACES, i);
-
 		if (value.empty())
 			break ;
+
 		if (!confInfo.is_context(value) && !confInfo.is_directive(value))
 			throw ValueNotFound();
-		
+
 		if (value == "location")
 			_locations.push_back(new Location(get_context_block(_content, ++i), _m));
 		else if (value == "limit_except")
@@ -49,16 +53,14 @@ bool	ServerBlock::getAutoIndex() const
 	return (_autoIndex);
 }
 
-ServerBlock::~ServerBlock() 
+ServerBlock::~ServerBlock()
 {
 	std::map<std::string, Directives*>::iterator it = _m.begin();
 
 	for (; it != _m.end(); it++)
 		delete it->second;
-
 	for (size_t i = 0; i < _locations.size(); i++)
 		delete _locations[i];
-
 }
 
 ServerBlock::ServerBlock(const ServerBlock &cpy)
