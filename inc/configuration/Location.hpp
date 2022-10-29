@@ -11,24 +11,26 @@
 class Location 
 {
 	public:
+
 		Location(const std::string &block, std::map<std::string, Directives*> m);
 		Location(const Location &cpy);
 		const Location &operator=(const Location &rhs);
 		~Location();
 
-		const std::string				&get_prefix() const;
-		const std::string				&get_root() const;
-		const std::vector<std::string>	&get_index() const;
-		
 		template <typename T>
 		T *dir(const std::string key)
 		{
 			return (dynamic_cast<T*>(_m[key]));
 		}
 
+		const std::string				&get_prefix() const;
+		const std::string				&get_root() const;
+		const std::vector<std::string>	&get_index() const;
+
 		void				order_locations();
 
 	private:
+
 
 		std::string							_prefix; // Path between "location" and "{"
 		std::vector<std::string>			_index; // Path to test in front of prefix
@@ -36,4 +38,4 @@ class Location
 		std::string							_content;
 };
 
-#endif 
+#endif

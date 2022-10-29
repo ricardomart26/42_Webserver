@@ -207,7 +207,10 @@ void	Listen::check_dup_listen_directives()
 			std::cout << i << std::endl;
 			const std::pair<std::string, int>	temp2 = _l[x]->get_value();
 			if (temp.first == temp2.first && temp.first == temp2.first)
+			{
+				std::cout << "ListenBlockEqual\n";
 				throw ListenBlockEqual();
+			}
 		}
 	}
 }

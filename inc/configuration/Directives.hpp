@@ -209,12 +209,13 @@ class Listen : public Directives
 		};
 
 
-		void		check_dup_listen_directives();
 		void		action(const std::string &value, t_context context);
 		void		print_content() const;
 		ListenIndv	*get_listen_indv(size_t i) const;
+		void		check_dup_listen_directives();
 
 	private:
+
 
 		std::vector<ListenIndv*>	_l;
 		t_context					_context;

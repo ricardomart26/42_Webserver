@@ -1,5 +1,8 @@
 ```mermaid
-journey
-	title Studying for exams
-	section Exam is announced
+	graph TD;
+		A-->B;
+		A-->C;
+		B-->D;
+		C-->D;
+
 ```
