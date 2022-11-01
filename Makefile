@@ -19,7 +19,7 @@ INC =	$(shell find $(INCDIR) -name '*.hpp')
 all: $(NAME)
 
 $(NAME): $(SRCS) $(INC)
-	$(CC) $(SRCS) -I$(INCDIR)/configuration -I$(INCDIR)/utils -o $(NAME)
+	$(CC) $(SRCS) -I$(INCDIR)/configuration -I$(INCDIR)/server -I$(INCDIR)/utils -o $(NAME)
 
 exec:
 	$(NAME)

@@ -1,0 +1,95 @@
+
+
+SERVER:
+
+- [x] CHECK FOR CONTENT TYPE IN POST REQUEST
+- [x] DEFAULT LOCATION BLOCKS
+- [X] UPLOAD DE FICHEIROS
+- [ ] FUCKED UP WHEN THERE IS A LOT OF 404
+
+HTTP HEADER:
+
+- [ ] HTTP status code 
+	->	https://www.youtube.com/watch?v=wJa5CTIFj7U
+	->	https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Status 
+	->	https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
+	->	https://umbraco.com/knowledge-base/http-status-codes/
+	->	204: https://www.google.com/search?channel=fs&client=ubuntu&q=how+to+receive+a+204+No+Content
+	->	400: https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Status/400
+
+
+- [ ] CREATE ERROR PAGES (HTML) FOR EACH ERROR STATUS CODE (EX. 404 Not found)
+- [ ] SEARCH FOR IMPORTANT HTTP HEADERS THAT WE ARE NOT SENDING https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Headers
+
+
+CONFIGURATION FILE:
+
+- [X] READ CONFIGURATION FILE PASSED AS ARGUMENT
+- [ ] CREATE LOCATION CLASS, FOR EACH LOCATION INSIDE SERVER BLOCK
+- [ ] CRIAR MAP COM DIRECTIVA E POINTER PARA FUNÇAO PARSING
+- [ ] CRIAR FUNÇÃO DE PARSING PARA CADA DIRECTIVE
+- [X] DIVIDIR FUNC PARSE_SERVER EM BLOCOS (SUBSTRINGS)
+- [X] PARSING DIRECTIVAS DENTRO DO SERVER_BLOCK
+- [ ] CHANGE STRUCTURE FROM CONFIG TO SERVER_BLOCK
+- [ ] ROOT HAS TO BE UPDATED, IT CANT BE A VECTOR
+- [ ] HANDLE ERRORS:
+		- [ ] PORT > LIMIT
+- [ ] WHAT IS SUPOSED TO HAPPEN IF SERVER DOES NOT HAVE ROOT DIRECTIVE, AND THE LOCATION DOES NOT HAVE ALSO 
+- [X] INDEX DIRECTIVE https://nginx.org/en/docs/http/ngx_http_index_module.html#directives
+- [X] LISTEN
+- [X] ROOT
+- [X] SERVER_NAME
+- [X] LIMIT_EXCEPT
+- [X] client_max_body_size
+- [X] error_page
+- [X] CORRECT FUCKING SPLIT
+- [ ] Switch ':' TO = (CONF FILE)
+- [X] HIDE 'cont' as a variable in ServerBlock Class
+- [X] CREATE A TRIM FUNCTION
+- [ ] ERROR WITH END OF SERVERBLOCK... MISSING THE '}'
+
+
+HTTP METHODS:
+
+- [X] POST METHOD
+	- [X] HANDLE UPLOAD FILES
+	- [x] HANDLE SUBMITED QUERIES
+	- [x] HANDLE MULTIPART-FORM-DATA
+
+- [ ] DELETE METHOD
+	- [x] DO RESEARCH ON THIS METHOD
+
+WEBSERVER:
+
+- [x] FIND OUT HOW THE FUCK WILL WE TEST THIS
+- [ ] CREATE TEST
+- [X] SETUP NGINX PROJECT TO COMPARE HTTP HEADER WITH OUR SERVER
+- [ ] AUTOMATE SENDING REQUEST TO SERVER (WITH INSOMNIA MAYBE)
+- [ ] SEE IF NGINX HANDLES IF A LISTEN IS WRONG (SEE WEBSERVER EVALUATION)
+- [ ] 
+
+-> https://www.digitalocean.com/community/tutorials/nginx-location-directive
+
+Variables to get from config file:
+
+GLOBAL = EM TODO O LADO
+
+- error_page a string from config file, to say where error page is. (Is optional, not mandatory to have in the config file) (GLOBAL)
+	https://www.oreilly.com/library/view/nginx-http-server/9781788623551/449e1610-676b-479f-810b-63599d0ca464.xhtml
+
+- client_max_body_size It sets the maximum allowed size of the client request body, specified in the “Content-Length” 
+request header field. Here’s an example of increasing the limit to 100MB in /etc/nginx/nginx.conf file. (GLOBAL)
+
+MUITA BOM BROTHER -> https://www.tecmint.com/limit-file-upload-size-in-nginx/
+
+- limit_except Lista de metodos para recusar (LOCATION) 
+	https://www.claudiokuenzler.com/blog/645/limit-http-request-methods-in-nginx-add-authentication-except-get
+
+
+- root (GLOBAL)
+
+- index (GLOBAL)
+
+- listen (SERVER) OK
+
+- server_name (SERVER) OK 
