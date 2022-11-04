@@ -1,0 +1,14 @@
+
+Contruir imagem:
+	docker build -t <nome da imagem> <diretorio do dockerfile>
+
+Criar o container com a imagem:
+	docker run --name=<nome do container> -d -it <nome da imagem>
+
+Entrar dentro do container:
+	docker exec -it <nome do container> bash
+
+As mudanças tem de ser feitas no default.conf para alterar o comportamento do nginx, mas é preciso construir a imagem novamente se for alterado no host.
+Se entrarmos no container e mudarmos a configuração do nginx, alteramos no ficheiro /etc/nginx/conf.d/default.conf e é preciso dar reload ao serviço depois da alteração com o comando "service nginx reload".
+Para vermos se o ficheiro de config está correto, executa se o comando "nginx -t".
+

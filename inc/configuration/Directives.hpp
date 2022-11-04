@@ -26,7 +26,7 @@ class Directives
 
 		virtual ~Directives() {}
 		virtual void	action(const std::string &value, t_context context) = 0;
-		virtual void	print_content() const = 0;
+		virtual void	printContent() const = 0;
 
 
 		class badContext : public std::exception
@@ -50,8 +50,8 @@ class ServerName : public Directives
 		~ServerName() {}
 
 		void				action(const std::string &value, t_context context);
-		void				print_content() const;
-		const std::string	&get_value(size_t i) const;
+		void				printContent() const;
+		const std::string	&getValue(size_t i) const;
 
 	private:
 
@@ -67,8 +67,8 @@ class Root : public Directives
 		~Root() {}
 
 		void	action(const std::string &value, t_context context);
-		void	print_content() const;
-		const std::string	&get_value() const;
+		void	printContent() const;
+		const std::string	&getValue() const;
 
 		class TooManyRoot : public std::exception
 		{
@@ -92,7 +92,7 @@ class ClientMaxBodySize : public Directives
 		~ClientMaxBodySize() {}
 
 		void	action(const std::string &value, t_context context);
-		void	print_content() const;
+		void	printContent() const;
 
 	private:
 
@@ -108,7 +108,9 @@ class ErrorPage : public Directives
 		~ErrorPage() {}
 
 		void	action(const std::string &value, t_context context);
-		void	print_content() const;
+		void	printContent() const;
+		std::vector<std::pair<std::vector<int>, std::string> >	getValue() const;
+		std::string	getErrorPath(int error) const;
 
 		class ErrorPageCodeNotInt : public std::exception
 		{
@@ -156,8 +158,8 @@ class ListenIndv
 		ListenIndv(const std::vector<std::string> &spl_value);
 		~ListenIndv() {}
 
-		void	handle_address(std::string addr);
-		void	handle_port(const std::string &port);
+		void	handleAddress(std::string addr);
+		void	handlePort(const std::string &port);
 
 		class ListenAddressNotValid : public std::exception
 		{
@@ -176,7 +178,7 @@ class ListenIndv
 			}
 		};
 
-		const std::pair<std::string, int>	&get_value() const;
+		const std::pair<std::string, int>	&getValue() const;
 
 	private:
 
@@ -210,8 +212,8 @@ class Listen : public Directives
 
 
 		void		action(const std::string &value, t_context context);
-		void		print_content() const;
-		ListenIndv	*get_listen_indv(size_t i) const;
+		void		printContent() const;
+		ListenIndv	*getListenIndv(size_t i) const;
 		void		check_dup_listen_directives();
 
 	private:
@@ -230,7 +232,7 @@ class LimitExcept : public Directives
 		~LimitExcept() {}
 
 		void	action(const std::string &value, t_context context);
-		void	print_content() const;
+		void	printContent() const;
 
 	private:
 
@@ -246,8 +248,8 @@ class Index : public Directives
 		~Index() {}
 
 		void	action(const std::string &value, t_context context);
-		void	print_content() const;
-		const std::vector<std::string>	&get_value() const;
+		void	printContent() const;
+		const std::vector<std::string>	&getValue() const;
 
 	private:
 

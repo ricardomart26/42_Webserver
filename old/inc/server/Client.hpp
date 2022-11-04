@@ -1,0 +1,62 @@
+#ifndef CLIENT_HPP
+#define CLIENT_HPP
+
+#include <string>
+#include <cstddef>
+#include <iostream>
+#include <unistd.h>
+// #include <string.h>
+
+#include "Request.hpp"
+#include "ServerBlock.hpp"
+#include "utils.hpp"
+#include "Get.hpp"
+#include "Post.hpp"
+#include "Delete.hpp"
+
+#define ERROR_PAGE "/Users/rimartin/Desktop/42_WebServer/web_files/error.html"
+
+class Client
+{
+	public:
+
+		Client(int fd, const std::vector<ServerBlock *> sb);
+		// Client(size_t buffer_size);
+		Client(const Client &cp);
+		Client &operator=(const Client &rhs);
+		~Client();
+
+		bool	createResponse();
+		bool	createRequest();
+		Request	&getRequest() const;
+		int		getClientSocket() const;
+		Request	*getRequest) const;
+
+		class MethodNotFound : public std::exception
+		{
+			public:
+
+				MethodNotFound(size_t err) : _err(err) {}
+
+			private:
+
+				size_t _err;
+
+		};
+
+	private:
+
+		bool		sendHttpError(unsigned short code);
+		bool		isFinished();
+		Response	*initResponse(int clientFd);
+		
+		int				_clientSocket;
+		static size_t	_read_size;
+		bool			_keep_alive;
+		Request			*_request;
+		Response		*_response;
+		bool			_finished;
+		const std::vector<ServerBlock *>	_sb;		
+};
+
+#endif

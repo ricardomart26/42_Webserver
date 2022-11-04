@@ -135,10 +135,19 @@ void	erase_while_is_equal(std::string &cont, char c)
 std::string	slice_str(const std::string &cont, const std::string &del, size_t &i)
 {
 	size_t save_i = i;
+	std::cout << "Check this one: " << cont << std::endl;
 	while (i < cont.length() && !isEqual(cont[i], del))
+	{
+		std::cout << cont[i] << std::endl;
 		i++;
+	}
+	std::cout << "\n";
+	
 	if (i == save_i)
 		return (std::string());
+	// std::cout <<  i - save_i << std::endl;
+	// std::cout <<  i << std::endl;
+	std::cout << "Answer is: " << cont.substr(save_i, i - save_i) << std::endl;
 	return (trim(cont.substr(save_i, i - save_i), SPACES));
 }
 
@@ -286,7 +295,7 @@ std::string getTime()
 	return ("Date: " + std::string(temp) + " GMT\r\n");
 }
 
-std::string get_relative_path(std::string path)
+std::string getRelative_path(std::string path)
 {
 	char buffer[1024];
 	memset(buffer, '\0', 1024);

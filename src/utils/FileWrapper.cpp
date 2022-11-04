@@ -1,10 +1,11 @@
 #include "FileWrapper.hpp"
+#include "utils.hpp"
 
 FileWrapper::FileWrapper(size_t size)
 	: _fd(-1), _filename(), _size(size), _file_ext() {}
 
 FileWrapper::FileWrapper(const std::string &filename, size_t size) 
-	: _fd(-1), _filename(filename), _size(size), _file_ext(std::string(_filename, _filename.find_last_of('.') + 1)) {}
+	: _fd(-1), _filename(filename), _size(size), _file_ext(std::string(_filename, _filename.find_last_of('.') + 1)) {std::cout << _filename << std::endl;}
 
 FileWrapper::FileWrapper(int fd, size_t size) 
 	: _fd(fd), _filename(), _size(size), _file_ext() {} 
@@ -15,7 +16,10 @@ void	FileWrapper::open(const std::string &path)
 {
 	_fd = ::open(path.c_str(), O_RDWR);
 	if (_fd == -1)
+	{
+		error_and_exit("triste");
 		throw FileNotFound();
+	}
 
 	size_t pos = path.find_last_of('/');
 	_filename = std::string(path, pos + 1);
@@ -46,7 +50,7 @@ void	FileWrapper::read()
 
 void				FileWrapper::closeFile() { close(_fd); _fd = -1; }
 bool				FileWrapper::empty() const { return (_content.size() <= 1); }
-const std::string	&FileWrapper::get_content() const { return (_content); }
+const std::string	&FileWrapper::getContent() const { return (_content); }
 const std::string	&FileWrapper::get_filename() const { return (_filename); }
 std::string			&FileWrapper::get_file_ext() { return (_file_ext); }
 int					FileWrapper::get_fd() const { return (_fd); }
@@ -54,3 +58,4 @@ size_t				FileWrapper::size() const { return (_content.size()); }
 size_t				FileWrapper::get_max_size() const { return (_size); }
 void				FileWrapper::set_fd(int fd) { _fd = fd; }
 void				FileWrapper::set_content(const std::string &content) { _content = content; }
+void				FileWrapper::set_file_ext(const std::string ext) { _file_ext = ext; }

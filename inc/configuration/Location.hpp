@@ -23,11 +23,11 @@ class Location
 			return (dynamic_cast<T*>(_m[key]));
 		}
 
-		const std::string				&get_prefix() const;
-		const std::string				&get_root() const;
-		const std::vector<std::string>	&get_index() const;
+		const std::string				&getPrefix() const;
+		const std::string				&getRoot() const;
+		const std::vector<std::string>	&getIndex() const;
 
-		void				order_locations();
+		void				orderLocations();
 
 	private:
 
