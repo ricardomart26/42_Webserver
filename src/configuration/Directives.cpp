@@ -17,7 +17,7 @@ void	ServerName::action(const std::string &value, t_context context)
 	_value.insert(_value.end(), temp.begin(), temp.end());
 }
 
-void	ServerName::print_content() const
+void	ServerName::printContent() const
 {
 	std::cout << "\nServer name: \n\n";
 	for (size_t j = 0; j < _value.size(); j++)
@@ -25,7 +25,7 @@ void	ServerName::print_content() const
 	std::cout << "\n";
 }
 
-const std::string	&ServerName::get_value(size_t i) const
+const std::string	&ServerName::getValue(size_t i) const
 {
 	return (_value[i]);
 }
@@ -50,12 +50,12 @@ void	Root::action(const std::string &value, t_context context)
 	_value = temp[0];
 }
 
-void	Root::print_content() const
+void	Root::printContent() const
 {
 	std::cout << "\nroot: " << _value << std::endl;
 }
 
-const std::string	&Root::get_value() const
+const std::string	&Root::getValue() const
 {
 	return (_value);
 }
@@ -89,7 +89,7 @@ void	ClientMaxBodySize::action(const std::string &value, t_context context)
 	_value = atoi(value.c_str());
 }
 
-void	ClientMaxBodySize::print_content() const
+void	ClientMaxBodySize::printContent() const
 {
 	std::cout << "\b\nclient_max_body_size: " << _value << std::endl;
 }
@@ -120,6 +120,7 @@ void	ErrorPage::action(const std::string &value, t_context context)
 	int		error;
 
 	std::vector<std::string> splited = split(value, SPACES);
+
 	if (splited.size() == 1)
 		throw ErrorPageOnlyOneArg();
 
@@ -144,7 +145,27 @@ void	ErrorPage::action(const std::string &value, t_context context)
 	_value.push_back(ret);
 }
 
-void	ErrorPage::print_content() const
+std::vector<std::pair<std::vector<int>, std::string> >	ErrorPage::getValue() const
+{
+	return (_value);
+}
+
+std::string ErrorPage::getErrorPath(int errorCode) const
+{
+	std::vector<std::pair<std::vector<int>, std::string> >::const_iterator it = _value.begin();
+	for (; it != _value.end(); it++)
+	{
+		std::vector<int>::const_iterator errorIt = it->first.begin();
+		for (; errorIt != it->first.end(); errorIt++)
+		{
+			if (*errorIt == errorCode)
+				return (it->second);
+		}
+	}
+	return ("");
+}
+
+void	ErrorPage::printContent() const
 {
 	std::cout << "\nError page: \n\n";
 	for (size_t j = 0; j < _value.size(); j++)
@@ -155,6 +176,7 @@ void	ErrorPage::print_content() const
 		std::cout << "\t-----------------\n";
 	}
 }
+
 
 /**
  * 
@@ -201,11 +223,11 @@ void	Listen::check_dup_listen_directives()
 	std::cout << _l.size() << std::endl;
 	for (size_t i = 0; i < _l.size(); i++)
 	{
-		const std::pair<std::string, int>	temp = _l[i]->get_value();
+		const std::pair<std::string, int>	temp = _l[i]->getValue();
 		for (size_t x = i + 1; x < _l.size(); x++)
 		{
 			std::cout << i << std::endl;
-			const std::pair<std::string, int>	temp2 = _l[x]->get_value();
+			const std::pair<std::string, int>	temp2 = _l[x]->getValue();
 			if (temp.first == temp2.first && temp.first == temp2.first)
 			{
 				std::cout << "ListenBlockEqual\n";
@@ -215,7 +237,7 @@ void	Listen::check_dup_listen_directives()
 	}
 }
 
-void	Listen::print_content() const {}
+void	Listen::printContent() const {}
 
 
 ListenIndv::ListenIndv(const std::vector<std::string> &split)
@@ -238,20 +260,20 @@ ListenIndv::ListenIndv(const std::vector<std::string> &split)
 
 	if (_syntax == ADDRESS_PORT)
 	{
-		handle_address(trim(value.substr(0, f_ret), SPACES));
-		handle_port(value.substr(f_ret + 1));
+		handleAddress(trim(value.substr(0, f_ret), SPACES));
+		handlePort(value.substr(f_ret + 1));
 	}
 	else if (_syntax == ADDRESS)
 	{
 		_port = 80;
-		handle_address(trim(value, SPACES));
+		handleAddress(trim(value, SPACES));
 	}
 	else
 	{
 		_address = "localhost";
 		if (value[0] == ':')
 			value.erase(0, 1);
-		handle_port(value.c_str());
+		handlePort(value.c_str());
 	}
 	std::cout << "Port is: " << _port << std::endl;
 	std::cout << "Address is: " << _address << std::endl;
@@ -259,18 +281,15 @@ ListenIndv::ListenIndv(const std::vector<std::string> &split)
 
 }
 
-ListenIndv *Listen::get_listen_indv(size_t i) const
+ListenIndv *Listen::getListenIndv(size_t i) const
 {
-	std::cout << _l.size() << std::endl;
-	std::cout << i << std::endl;
-
 	if (i >= _l.size())
 		return (NULL);
 	return (_l[i]);
 }
 
 
-void	ListenIndv::handle_address(std::string addr)
+void	ListenIndv::handleAddress(std::string addr)
 {
 
 	if (addr == "localhost" || addr == "127.0.0.1")
@@ -288,8 +307,8 @@ void	ListenIndv::handle_address(std::string addr)
 
 	while (1)
 	{
-		int num = convert_to<int, std::string>(addr);
-		addr.erase(0, convert_to<std::string>(num).size());
+		int num = convertTo<int, std::string>(addr);
+		addr.erase(0, convertTo<std::string>(num).size());
 
 		if (num < 0 || num > 255)
 			throw ListenAddressNotValid();
@@ -304,18 +323,18 @@ void	ListenIndv::handle_address(std::string addr)
 	}
 }
 
-void	ListenIndv::handle_port(const std::string &port)
+void	ListenIndv::handlePort(const std::string &port)
 {
 	std::cout << "port is: " << port << std::endl;
 	if (port.find_last_not_of("0123456789") != std::string::npos)
 		throw ListenPortNotValid();
 
-	_port = convert_to<int>(port);
+	_port = convertTo<int>(port);
 	if (_port < 0 || _port > 65535)
 		throw ListenPortNotValid();
 }
 
-const std::pair<std::string, int>	&ListenIndv::get_value() const
+const std::pair<std::string, int>	&ListenIndv::getValue() const
 {
 	return (_value);
 }
@@ -355,7 +374,7 @@ void	LimitExcept::action(const std::string &value, t_context context)
 	}
 }
 
-void	LimitExcept::print_content() const
+void	LimitExcept::printContent() const
 {
 	std::cout << "limit except:  \n\n\tGET - " << _value[0] 
 	<< "\n\tPOST - " << _value[1]
@@ -381,7 +400,7 @@ void	Index::action(const std::string &value, t_context context)
 	_value.insert(_value.end(), temp.begin(), temp.end());
 }
 
-void	Index::print_content() const
+void	Index::printContent() const
 {
 	std::cout << "Index: \n\n";
 	for (size_t i = 0; i < _value.size(); i++)
@@ -389,7 +408,7 @@ void	Index::print_content() const
 	std::cout << "\n";
 }
 
-const std::vector<std::string>	&Index::get_value() const
+const std::vector<std::string>	&Index::getValue() const
 {
 	return (_value);
 }

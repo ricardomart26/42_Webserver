@@ -1,4 +1,14 @@
 
+EZEQUIEL:
+
+- [ ] pagina de auto index
+- [ ] Ver se cada diretiva é permitida dentro do contexto que está, e.g:
+	server {
+		server {
+
+		}
+	}
+	Isto é errado
 
 SERVER:
 

@@ -9,29 +9,25 @@ size_t	until_alpha(const std::string &str, size_t i)
 
 Location::Location(const std::string &block, std::map<std::string, Directives*> m) : _m(m)
 {
-	std::cout << "Location block: " << block << std::endl;
 	_prefix = trim(block.substr(0, block.find('{')), SPACES);
-	std::cout << "Prefix is: " << _prefix << std::endl;
 	_content = block.substr(block.find('{') + 1);
+	std::cout << "Prefix is: " << _prefix << std::endl;
 	for (size_t i = 0; _content[i]; i = until_alpha(_content, i))
 	{
+		std::cout << "\nContent is: " << _content << std::endl;
 		std::string sliced = slice_str(_content, SPACES, i);
+		std::cout << "sliced string: " << sliced << std::endl;;
 		if (sliced.empty())
 			break ;
 
 		std::string end = SPACES;
-
 		if (sliced == "limit_except")
 			end = "}";
 		_m[sliced]->action(slice_str(_content, end, ++i), LOCATION);
 	}
 }
 
-Location::~Location()
-{
-
-}
-
+Location::~Location() {}
 
 Location::Location(const Location &cpy)
 {
@@ -60,12 +56,12 @@ const Location &Location::operator=(const Location &rhs)
 }
 
 
-const std::string &Location::get_prefix() const
+const std::string &Location::getPrefix() const
 {
 	return (_prefix);
 }
 
-const std::vector<std::string>	&Location::get_index() const
+const std::vector<std::string>	&Location::getIndex() const
 {
 	return (_index);
 }

@@ -25,7 +25,7 @@ bool						isEqual(char c, const std::string &str);
 bool						isEqual(const std::string &dest, const std::vector<std::string> src);
 
 template <typename T, typename U>
-void	convert_to(T &src, U &dest)
+void	convertTo(T &src, U &dest)
 {
 	std::stringstream ss;
 
@@ -35,7 +35,7 @@ void	convert_to(T &src, U &dest)
 }
 
 template <typename T, typename U>
-T	convert_to(U &src)
+T	convertTo(U &src)
 {
 	std::stringstream ss;
 	T ret;
@@ -53,7 +53,7 @@ void			error_and_exit(const char *msg);
 std::ifstream	openFile(const char *path);
 char			*ft_itoa(int n);
 std::string		getTime();
-std::string		get_relative_path(std::string path);
+std::string		getRelative_path(std::string path);
 std::string		remove_header(const std::string &content); 
 int				ft_atoi(const char *str);
 

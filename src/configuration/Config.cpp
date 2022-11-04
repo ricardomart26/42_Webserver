@@ -9,7 +9,7 @@ Config::Config(const char *filename)
 {
 	_file.open(filename);
 	_file.read();
-	_content = _file.get_content();
+	_content = _file.getContent();
 
 	remove_empty_new_lines();
 
@@ -20,14 +20,14 @@ Config::Config(const char *filename)
 	parse_server_block();
 }
 
-ServerBlock	*Config::get_server_block(size_t i)
+ServerBlock	*Config::getServerBlock(size_t i)
 {
 	if (i >= _server_block.size())
 		return (NULL);
 	return (_server_block[i]);
 }
 
-std::vector<ServerBlock*>	&Config::get_server_block_vec()
+std::vector<ServerBlock*>	&Config::getServerBlockVec()
 {
 	return (_server_block);
 }

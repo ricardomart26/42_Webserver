@@ -10,24 +10,28 @@ int main(int ac, char **av)
 		return (1);
 	}
 
-	Server *server = NULL;
+	std::vector <Server *> cluster;
 	try
 	{
 		Config conf(av[1]);
-		server = new Server(av[1]);
-
-		server->setup_sockets();
-
+		for (size_t i = 0; conf.getServerBlock(i) != NULL; i++)
+		{
+			cluster.push_back(new Server(conf.getServerBlock(i)));
+		}
 		std::cout << "\nServer Starting...\n";
 		while (1)
-			server->run();
-
-		delete server;
+		{
+			for (size_t i = 0; i < cluster.size(); i++)
+				cluster[i]->run();
+		}
+		for (size_t i = 0; i < cluster.size(); i++)
+			delete cluster[i];
 	} 
 	catch (const std::exception &e) 
 	{
 		std::cout << e.what() << std::endl;
-		// delete server;
+		for (size_t i = 0; i < cluster.size(); i++)
+			delete cluster[i];
 	}
 
 	return (0);

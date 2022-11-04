@@ -25,7 +25,7 @@ class FileWrapper {
 
 		bool	empty() const;
 
-		const std::string	&get_content() const;
+		const std::string	&getContent() const;
 		const std::string	&get_filename() const;
 		std::string			&get_file_ext();
 		int					get_fd() const;
@@ -49,6 +49,7 @@ class FileWrapper {
 		};
 
 		void				set_fd(int fd);
+		void				set_file_ext(const std::string ext);
 		void				set_content(const std::string &content);
 
 	private:
