@@ -28,7 +28,6 @@ class Directives
 		virtual void	action(const std::string &value, t_context context) = 0;
 		virtual void	printContent() const = 0;
 
-
 		class badContext : public std::exception
 		{
 			const char *what() const throw()
@@ -197,8 +196,8 @@ class Listen : public Directives
 		
 		~Listen()
 		{
-			std::vector<ListenIndv*>::iterator it = _l.begin();
-			for (; it != _l.end(); it++)
+			std::vector<ListenIndv*>::iterator it = _indvListen.begin();
+			for (; it !=_indvListen.end(); it++)
 				delete *it;
 		}
 
@@ -210,7 +209,6 @@ class Listen : public Directives
 			}
 		};
 
-
 		void		action(const std::string &value, t_context context);
 		void		printContent() const;
 		ListenIndv	*getListenIndv(size_t i) const;
@@ -218,8 +216,7 @@ class Listen : public Directives
 
 	private:
 
-
-		std::vector<ListenIndv*>	_l;
+		std::vector<ListenIndv*>	_indvListen;
 		t_context					_context;
 };
 

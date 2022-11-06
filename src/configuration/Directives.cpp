@@ -212,22 +212,20 @@ void	Listen::action(const std::string &value, t_context context)
 		if (_context != context)
 			throw badContext();
 	}
-	_l.push_back(new ListenIndv(split(value, SPACES)));
+	_indvListen.push_back(new ListenIndv(split(value, SPACES)));
 }
 
 void	Listen::check_dup_listen_directives()
 {
-	for (size_t i = 0; i < _l.size(); i++)
+	for (size_t i = 0; i < _indvListen.size(); i++)
 	{
-		const std::pair<std::string, int>	temp = _l[i]->getValue();
-		for (size_t x = i + 1; x < _l.size(); x++)
+		const std::pair<std::string, int>	value = _indvListen[i]->getValue();
+		for (size_t x = i + 1; x < _indvListen.size(); x++)
 		{
-			const std::pair<std::string, int>	temp2 = _l[x]->getValue();
-			if (temp.first == temp2.first && temp.first == temp2.first)
-			{
-				std::cout << "ListenBlockEqual\n";
-				throw ListenBlockEqual();
-			}
+			const std::pair<std::string, int>	value2 = _indvListen[x]->getValue();
+			if (value.first == value2.first && value.second == value2.second)
+				this->_indvListen.erase(_indvListen.begin() + x);
+				// throw ListenBlockEqual();
 		}
 	}
 }
@@ -278,9 +276,9 @@ ListenIndv::ListenIndv(const std::vector<std::string> &split)
 
 ListenIndv *Listen::getListenIndv(size_t i) const
 {
-	if (i >= _l.size())
+	if (i >= _indvListen.size())
 		return (NULL);
-	return (_l[i]);
+	return (_indvListen[i]);
 }
 
 

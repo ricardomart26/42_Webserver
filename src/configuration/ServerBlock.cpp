@@ -33,12 +33,16 @@ void	ServerBlock::parseFile()
 		if (!confInfo.is_context(value) && !confInfo.is_directive(value))
 			throw ValueNotFound();
 
-		if (value == "location")
-			_locations.push_back(new Location(get_context_block(_content, ++i), _m));
-		else if (value == "limit_except")
-			_m[value]->action(slice_str(_content, "}", ++i), SERVER);
-		else
-			_m[value]->action(slice_str(_content, _end, ++i), SERVER);
+		try {
+			if (value == "location")
+				_locations.push_back(new Location(get_context_block(_content, ++i), _m));
+			else if (value == "limit_except")
+				_m[value]->action(slice_str(_content, "}", ++i), SERVER);
+			else
+				_m[value]->action(slice_str(_content, _end, ++i), SERVER);
+		} catch (const std::exception &e) {
+			std::cout << "New error:" << e.what() << std::endl;
+		}
 	}
 	dynamic_cast<Listen *>(_m["listen"])->check_dup_listen_directives();
 }
