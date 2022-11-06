@@ -97,12 +97,14 @@ std::string &Request::removeQuery()
 	return (_path);
 }
 
-const std::string	&Request::getPath() const { return (_path); }
+std::string			&Request::getPath()  { return (_path); }
+void				Request::setPath(const std::string &path) { _path = path; }
+
 const std::string	&Request::getHttpVersion() const { return (_requestLine[2]); }
 const std::string	&Request::getMethod() const { return (_requestLine[0]); }
 const std::string	&Request::getHost() { return (getMapValue("Host")); }
 const std::string	&Request::getConnectionType() { return (getMapValue("Connection")); }
-const std::string	&Request::getBody() const { return (getBody()); } 
+const std::string	&Request::getBody() const { return (_body); } 
 const std::string	&Request::getQueryString() const { return (_queryString); }
 const std::string	&Request::getReferer() { return (getMapValue("Referer")); }
 const std::string	&Request::getSecFetchDest() { return (getMapValue("Sec-Fetch-Dest")); }

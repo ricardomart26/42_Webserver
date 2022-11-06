@@ -21,6 +21,6 @@ void	Get::sendToClient(const Request &request)
 		_queue.add_data(_file.getContent() + "\r\n");
 	}
 	string response = _queue.get_data();
-
+	// std::cout << "\n\n\nRESPONSE IS:\n\n" << response << "\n";
 	send(_clientSocket, response.c_str(), response.size() - 1, 0);
 }

@@ -8,13 +8,10 @@ INCDIR = inc
 SRCS =	main.cpp $(shell find $(SRCDIR) -name '*.cpp')
 INC =	$(shell find $(INCDIR) -name '*.hpp')
 
-# SRCS := $(addprefix $(SRCDIR), $(SRCS))
-# INC := $(addprefix $(SRCDIR), $(INC))
-
 all: $(NAME)
 
 $(NAME): $(SRCS) $(INC)
-	$(CC) $(SRCS) -I$(INCDIR)/configuration -I$(INCDIR)/server_ref -I$(INCDIR)/utils -o $(NAME)
+	$(CC) $(SRCS) -I$(INCDIR)/configuration -I$(INCDIR)/server -I$(INCDIR)/utils -o $(NAME)
 
 exec:
 	$(NAME)

@@ -11,19 +11,22 @@ Response::Response(Request *request, int client_socket, size_t status_code, Serv
 		_locationHandler->init();
 		_locationHandler->getLocationRoot();
 		
-		size_t len = _locationHandler->getPath().size();
 		// Ver qual é a ordem para procurar o index, o location ou o sb primeiro?
-		if (_locationHandler->getPath()[len - 1] == '/')
+		if (_locationHandler->getPath()[_locationHandler->getPath().size() - 1] == '/')
 			_locationHandler->searchForFiles(_sb->dir<Index>("index")->getValue(), _sb->getAutoIndex());
 
 		_path = _locationHandler->getPath();
-		
+		std::cout << "Path is: " << std::endl;
+		_file.open(request->getPath());
 	} catch (int err) {
 		std::cout << "error is: " << err << std::endl;
 		_status_code = (size_t)err;
+	} catch (const std::exception &e) {
+		std::cout << e.what() << std::endl;
+		_status_code = 404;
 	}
 
-	std::cout << "Status code is: " << _status_code << std::endl;
+	// std::cout << "Status code is: " << _status_code << std::endl;
 	if (_status_code == 405 || _status_code == 404)
 	{
 		std::string errorPath = _sb->dir<ErrorPage>("error_page")->getErrorPath(status_code);
@@ -37,14 +40,6 @@ Response::Response(Request *request, int client_socket, size_t status_code, Serv
 		}
 		else
 			_file.open(errorPath);
-	}
-	else
-	{
-		try {
-			_file.open(request->getPath());
-		} catch (const std::exception &e) {
-			std::cout << e.what() << std::endl;
-		}
 	}
 
 	if (_file.getContent().empty())

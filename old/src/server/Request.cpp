@@ -36,7 +36,7 @@ Request::Request(int client_fd, const std::vector<ServerBlock *> sb)
 	if (_file.size() <= 1)
 		throw EmptyRequest();
 
-	std::cout << _file.getContent();
+	// std::cout << _file.getContent();
 	ConvertHttpRequestToMap(_file.getContent());
 	_requestLine = split(getMapValue("METHOD"), " ");
 
@@ -47,22 +47,19 @@ Request::Request(int client_fd, const std::vector<ServerBlock *> sb)
 
 	ServerBlock *serverblock = selectServerBlock(getHost());
 
-	if (serverblock == NULL)
+	if (serverblock == NULL) // Isto pode alguma vez acontecer? Acho que nao
 		throw ServerBlockNotFound();
-	// if (methodNotAllowed(getMethod()))
-	// {
-	// 	throw serverblock->dir<ErrorPage>("error_page")->getErrorPath(405);
-	// }
-	_locationHandler = new LocationHandler(_file.getContent(), serverblock);
-	_locationHandler->init(_path);
-	_locationHandler->getLocationRoot();
-	
-	size_t len = _locationHandler->getPath().size();
-	// Ver qual é a ordem para procurar o index, o location ou o sb primeiro?
-	if (_locationHandler->getPath()[len - 1] == '/')
-		_locationHandler->searchForFiles(serverblock->dir<Index>("index")->getValue(), serverblock->getAutoIndex());
 
-	_path = _locationHandler->getPath();
+	// _locationHandler = new LocationHandler(_file.getContent(), serverblock);
+	// _locationHandler->init(_path);
+	// _locationHandler->getLocationRoot();
+	
+	// size_t len = _locationHandler->getPath().size();
+	// // Ver qual é a ordem para procurar o index, o location ou o sb primeiro?
+	// if (_locationHandler->getPath()[len - 1] == '/')
+	// 	_locationHandler->searchForFiles(serverblock->dir<Index>("index")->getValue(), serverblock->getAutoIndex());
+
+	// _path = _locationHandler->getPath();
 }
 
 Request::~Request() {}

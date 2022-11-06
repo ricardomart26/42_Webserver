@@ -71,7 +71,6 @@ void	Config::parse_server_block()
 			pos++;
 
 		i = pos;
-		std::cout << i << std::endl;
 		for (size_t counter = 1; counter && _content[i]; i++) 
 		{
 			if (_content[i] == '{')

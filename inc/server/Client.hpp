@@ -29,18 +29,6 @@ class Client
 		int		getClientSocket() const;
 		Request	*getRequest() const;
 
-		class MethodNotFound : public std::exception
-		{
-			public:
-
-				MethodNotFound(size_t err) : _err(err) {}
-
-			private:
-
-				size_t _err;
-
-		};
-
 	private:
 
 		bool		sendHttpError(unsigned short code);
