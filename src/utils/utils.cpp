@@ -135,19 +135,19 @@ void	erase_while_is_equal(std::string &cont, char c)
 std::string	slice_str(const std::string &cont, const std::string &del, size_t &i)
 {
 	size_t save_i = i;
-	std::cout << "Check this one: " << cont << std::endl;
+	// std::cout << "Check this one: " << cont << std::endl;
 	while (i < cont.length() && !isEqual(cont[i], del))
 	{
-		std::cout << cont[i] << std::endl;
+		// std::cout << cont[i] << std::endl;
 		i++;
 	}
-	std::cout << "\n";
+	// std::cout << "\n";
 	
 	if (i == save_i)
 		return (std::string());
 	// std::cout <<  i - save_i << std::endl;
 	// std::cout <<  i << std::endl;
-	std::cout << "Answer is: " << cont.substr(save_i, i - save_i) << std::endl;
+	// std::cout << "Answer is: " << cont.substr(save_i, i - save_i) << std::endl;
 	return (trim(cont.substr(save_i, i - save_i), SPACES));
 }
 

@@ -10,7 +10,7 @@ class LocationHandler {
 
 	public:
 		
-		LocationHandler(ServerBlock	*sb, const std::string &path);
+		LocationHandler(ServerBlock	*sb, std::string &path);
 		~LocationHandler();
 
 		void					init();
@@ -21,13 +21,13 @@ class LocationHandler {
 
 		std::vector<Location*>	getLocationVec() const;
 		Location				*getLocation() const;
-		const std::string		&getPath() const;
+		std::string				&getPath();
 
 	private:
 
 		ServerBlock				*_sb;
 		Location				*_location;
-		std::string				_path;
+		std::string				*_path;
 		std::string				_sbRoot;
 		std::vector<Location *>	_locationVec;
 };

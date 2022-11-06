@@ -9,21 +9,24 @@ size_t	until_alpha(const std::string &str, size_t i)
 
 Location::Location(const std::string &block, std::map<std::string, Directives*> m) : _m(m)
 {
+	std::string end_delimiter;
 	_prefix = trim(block.substr(0, block.find('{')), SPACES);
 	_content = block.substr(block.find('{') + 1);
-	std::cout << "Prefix is: " << _prefix << std::endl;
+
+	// std::cout << "\n\n\n@LOCATION BLOCK:\n\n";
+	// std::cout << "Prefix is: " << _prefix << std::endl;
+	// std::cout << "content is: " << _content << std::endl;
+
 	for (size_t i = 0; _content[i]; i = until_alpha(_content, i))
 	{
-		std::cout << "\nContent is: " << _content << std::endl;
+		// std::cout << "\nContent is: " << _content << std::endl;
 		std::string sliced = slice_str(_content, SPACES, i);
-		std::cout << "sliced string: " << sliced << std::endl;;
 		if (sliced.empty())
 			break ;
-
-		std::string end = SPACES;
+		end_delimiter = SPACES;
 		if (sliced == "limit_except")
-			end = "}";
-		_m[sliced]->action(slice_str(_content, end, ++i), LOCATION);
+			end_delimiter = "}";
+		_m[sliced]->action(slice_str(_content, end_delimiter, ++i), LOCATION);
 	}
 }
 
@@ -41,7 +44,7 @@ const Location &Location::operator=(const Location &rhs)
 {
 	if (this == &rhs)
 	{
-		std::cout << "Prefix is: " << _prefix << std::endl;
+		// std::cout << "Prefix is: " << _prefix << std::endl;
 		this->_prefix = rhs._prefix;
 
 		std::map<std::string, Directives*>::const_iterator it = rhs._m.begin();

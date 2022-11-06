@@ -69,7 +69,7 @@ void	Socket::getReadAndWriteSize()
  */
 void	Socket::socket_bind(size_t port)
 {
-	std::cout << "port: " << port << std::endl;
+	// std::cout << "port: " << port << std::endl;
 	_port = port;
 	_sock_addr.sin_family = _address_family; // ipv4 address
 	_sock_addr.sin_addr.s_addr = htonl(INADDR_ANY);

@@ -43,8 +43,9 @@ class Request
 		std::string	&getMapValue(c_string value);
 		std::map<std::string, std::string>	&getMap();
 
+		void		setPath(const std::string &path);
 
-		c_string	&getPath() const;
+		string		&getPath();
 		map_type	&getInfo();
 		c_string	&getHttpVersion() const;
 		c_string	&getMethod() const; 

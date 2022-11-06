@@ -22,7 +22,7 @@ void	LocationHandler::init(const std::string &path)
 	// Search in location prefix for the best match for request path
 	for (; i < _locationVec.size(); i++)
 	{
-		std::cout << "Options are: " << _locationVec[i]->getPrefix() << std::endl;
+		// std::cout << "Options are: " << _locationVec[i]->getPrefix() << std::endl;
 		std::cout << "Options are: " << path << std::endl;
 
 		if (_locationVec[i]->getPrefix().compare(path) == 0)
@@ -53,8 +53,8 @@ void	LocationHandler::getLocationRoot()
 	std::string ret;
 	std::string location_root = _location->dir<Root>("root")->getValue();
 	// std::cout << "Root found is: " << _location->getRoot() << std::endl;
-	std::cout << "Path is: " << _path << std::endl;
-	std::cout << "location root is: " << location_root << std::endl;
+	// std::cout << "Path is: " << _path << std::endl;
+	// std::cout << "location root is: " << location_root << std::endl;
 
 	if (location_root.empty())
 	{

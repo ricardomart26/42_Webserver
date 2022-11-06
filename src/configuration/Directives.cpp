@@ -212,21 +212,16 @@ void	Listen::action(const std::string &value, t_context context)
 		if (_context != context)
 			throw badContext();
 	}
-	// std::cout << "value is: " << value << std::endl;
 	_l.push_back(new ListenIndv(split(value, SPACES)));
-	std::cout << _l.size() << std::endl;
-
 }
 
 void	Listen::check_dup_listen_directives()
 {
-	std::cout << _l.size() << std::endl;
 	for (size_t i = 0; i < _l.size(); i++)
 	{
 		const std::pair<std::string, int>	temp = _l[i]->getValue();
 		for (size_t x = i + 1; x < _l.size(); x++)
 		{
-			std::cout << i << std::endl;
 			const std::pair<std::string, int>	temp2 = _l[x]->getValue();
 			if (temp.first == temp2.first && temp.first == temp2.first)
 			{
@@ -275,8 +270,8 @@ ListenIndv::ListenIndv(const std::vector<std::string> &split)
 			value.erase(0, 1);
 		handlePort(value.c_str());
 	}
-	std::cout << "Port is: " << _port << std::endl;
-	std::cout << "Address is: " << _address << std::endl;
+	// std::cout << "Port is: " << _port << std::endl;
+	// std::cout << "Address is: " << _address << std::endl;
 	_value = std::make_pair(_address, _port);
 
 }
@@ -349,7 +344,7 @@ LimitExcept::LimitExcept(t_context context)
 
 void	LimitExcept::action(const std::string &value, t_context context)
 {
-	std::cout << "LimitExcept context is: " << _context << std::endl;
+	// std::cout << "LimitExcept context is: " << _context << std::endl;
 	if (_context != GLOBAL)
 	{
 		if (_context != context)

@@ -5,7 +5,7 @@ FileWrapper::FileWrapper(size_t size)
 	: _fd(-1), _filename(), _size(size), _file_ext() {}
 
 FileWrapper::FileWrapper(const std::string &filename, size_t size) 
-	: _fd(-1), _filename(filename), _size(size), _file_ext(std::string(_filename, _filename.find_last_of('.') + 1)) {std::cout << _filename << std::endl;}
+	: _fd(-1), _filename(filename), _size(size), _file_ext(std::string(_filename, _filename.find_last_of('.') + 1)) {}
 
 FileWrapper::FileWrapper(int fd, size_t size) 
 	: _fd(fd), _filename(), _size(size), _file_ext() {} 
@@ -14,12 +14,10 @@ FileWrapper::~FileWrapper() {}
 
 void	FileWrapper::open(const std::string &path)
 {
+	// std::cout << "Paths are: " << path << std::endl;
 	_fd = ::open(path.c_str(), O_RDWR);
 	if (_fd == -1)
-	{
-		error_and_exit("triste");
 		throw FileNotFound();
-	}
 
 	size_t pos = path.find_last_of('/');
 	_filename = std::string(path, pos + 1);
