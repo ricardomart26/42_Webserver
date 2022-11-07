@@ -223,7 +223,7 @@ void	Listen::check_dup_listen_directives()
 		for (size_t x = i + 1; x < _indvListen.size(); x++)
 		{
 			const std::pair<std::string, int>	value2 = _indvListen[x]->getValue();
-			if (value.first == value2.first && value.second == value2.second)
+			if (value.first == value2.first && value.second == value2.second) // QUESTION: Apagar ou mandar erro?
 				this->_indvListen.erase(_indvListen.begin() + x);
 				// throw ListenBlockEqual();
 		}
