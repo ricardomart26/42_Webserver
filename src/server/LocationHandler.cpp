@@ -19,7 +19,7 @@ LocationHandler::~LocationHandler() {}
 void	LocationHandler::init()
 {
 	size_t i = 0;
-	// std::cout << "Ve o path:::: " << *_path << std::endl;
+	std::cout << "Path is: " << *_path << std::endl;
 	// Search in location prefix for the best match for request path
 	for (; i < _locationVec.size(); i++)
 	{
@@ -27,7 +27,7 @@ void	LocationHandler::init()
 		if (!_locationVec[i]->getPrefix().compare(*_path) || !_locationVec[i]->getPrefix().compare("/"))
 		{
 			_location = _locationVec[i];
-			// std::cout << "DEBUG:::LocationHandler::find this one()\n\n\tOption found: " << ((_location == NULL) ? "NULL" : _location->getPrefix()) << "\n\n";
+			std::cout << "\nLocation found: " <<  _location->getPrefix() << "\n\n";
 			return ;
 		}
 	}
