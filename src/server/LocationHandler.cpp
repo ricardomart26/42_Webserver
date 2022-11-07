@@ -23,7 +23,8 @@ void	LocationHandler::init()
 	// Search in location prefix for the best match for request path
 	for (; i < _locationVec.size(); i++)
 	{
-		// std::cout << "Options are: " << _locationVec[i]->getPrefix() << std::endl;
+		std::cout << "Options are: " << _locationVec[i]->dir<Root>("root")->getValue() << std::endl;
+			
 		if (!_locationVec[i]->getPrefix().compare(*_path) || !_locationVec[i]->getPrefix().compare("/"))
 		{
 			_location = _locationVec[i];
@@ -57,7 +58,10 @@ void	LocationHandler::getLocationRoot()
 	}
 	else
 		*_path = _location->dir<Root>("root")->getValue() + *_path;
-	// std::cout << "DEBUG::: LocationHandler::getLocationRoot()\n\n\tPath is: " << *_path << "\n";
+		
+	std::cout << "\n\t@LOCATION ROOT: " << _location->dir<Root>("root")->getValue() << "\n\n";
+	
+	std::cout << "\n\t@FINAL PATH: " << *_path << "\n\n";
 }
 
 std::string	LocationHandler::searchForPathWithIndex(const std::vector<std::string> &indexVec)

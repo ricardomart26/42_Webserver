@@ -19,8 +19,12 @@ Location::Location(const std::string &block, std::map<std::string, Directives*> 
 
 	for (size_t i = 0; _content[i]; i = until_alpha(_content, i))
 	{
-		// std::cout << "\nContent is: " << _content << std::endl;
+		while (_content[i] && !isalpha(_content[i]))
+			i++;
+		std::cout << "\nContent is: " << _content << std::endl;
 		std::string sliced = slice_str(_content, SPACES, i);
+		std::cout << "\nSliced is: " << sliced << std::endl;
+	
 		if (sliced.empty())
 			break ;
 		end_delimiter = SPACES;
@@ -34,6 +38,7 @@ Location::~Location() {}
 
 Location::Location(const Location &cpy)
 {
+	exit(3);
 	_prefix = cpy._prefix;
 	_m = cpy._m;
 	_index = cpy._index;
@@ -44,7 +49,7 @@ const Location &Location::operator=(const Location &rhs)
 {
 	if (this == &rhs)
 	{
-		// std::cout << "Prefix is: " << _prefix << std::endl;
+		exit(2);
 		this->_prefix = rhs._prefix;
 
 		std::map<std::string, Directives*>::const_iterator it = rhs._m.begin();
