@@ -27,7 +27,7 @@ class Location
 		const std::string				&getRoot() const;
 		const std::vector<std::string>	&getIndex() const;
 
-		void				orderLocations();
+		void							orderLocations();
 
 	private:
 
