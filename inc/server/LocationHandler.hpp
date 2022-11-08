@@ -13,11 +13,11 @@ class LocationHandler {
 		LocationHandler(ServerBlock	*sb, std::string &path);
 		~LocationHandler();
 
-		void					init();
-		void					getLocationRoot();
+		void					findLocationBlock();
+		std::string				findRoot();
 		std::string				searchForPathWithIndex(const std::vector<std::string> &index_vec);
-		void					searchForFiles(const std::vector<std::string> &sb_index_vec, bool auto_index);
 		bool					emptyLocation() const;
+		void					checkIfDir();
 
 		std::vector<Location*>	getLocationVec() const;
 		Location				*getLocation() const;
@@ -27,7 +27,7 @@ class LocationHandler {
 
 		ServerBlock				*_sb;
 		Location				*_location;
-		std::string				*_path;
+		std::string				_path;
 		std::string				_sbRoot;
 		std::vector<Location *>	_locationVec;
 };
