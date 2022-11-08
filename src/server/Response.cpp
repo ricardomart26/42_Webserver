@@ -14,7 +14,8 @@ Response::Response(Request *request, int client_socket, size_t status_code, Serv
 		// No caso do url acabar com um '/'
 		_locationHandler->checkIfDir();
 
-		_path = _locationHandler->getPath();
+		// _path = _locationHandler->getPath();
+		std::cout << "Final path: " << _path << "\n";
 		_file.open(_path);
 	} catch (int err) {
 		std::cout << "error is: " << err << std::endl;
@@ -45,28 +46,27 @@ Response::Response(Request *request, int client_socket, size_t status_code, Serv
 		_file.read();
 		_file.closeFile();
 	}
-	if (_file.get_file_ext() == "php")
-		_file.set_fd(handlePhp(request));
 
 	if (_file.get_file_ext() == "php")
 	{
+		_file.set_fd(handlePhp(request));
 		ConvertHttpRequestToMap(_file.getContent());
 
 		std::vector<std::string> _request_line = split(_map["METHOD"], " ");
+
 		if (!_request_line[1].empty())
 			_status_code = ft_atoi(_request_line[1].c_str());
-		
 		if (!_request_line[2].empty())
 			_reason_phrase = _request_line[2];
 
 		std::string redirection = _map["Location"];
+
 		if (!redirection.empty())
 			_rh.add_response_header("Location: " + redirection + "\r\n");
-
 		_file.set_content(remove_header(_file.getContent()));
 	}
-
-	_rh.set_entity_header(_file.get_file_ext(), _file.getContent().size(), request->getSecFetchDest());
+	std::string ext = "html";
+	_rh.set_entity_header(ext, _file.getContent().size(), request->getSecFetchDest());
 	_rh.set_general_header();
 	_rh.set_response_header();
 }
@@ -89,6 +89,8 @@ void	Response::ConvertHttpRequestToMap(const std::string &msg)
 			j = i + 1;
 		}
 	}
+	if (msg[j + 1] == '\0')
+		return ;
 	for (; msg[j + 2] != '\0'; j++)
 		_body.push_back(msg[j + 2]);
 }
@@ -110,9 +112,7 @@ int	Response::handlePhp(Request *request)
 	int pfd1[2];
 	int pfd2[2];
 	
-	if (pipe(pfd1) == -1)
-		error_and_exit("Pipe error in Response::handlePHP");
-	if (pipe(pfd2) == -1)
+	if (pipe(pfd1) == -1 || pipe(pfd2) == -1)
 		error_and_exit("Pipe error in Response::handlePHP");
 
 	pid_t pid = fork();
@@ -140,13 +140,6 @@ int	Response::handlePhp(Request *request)
 		e[7] = strdup(string("CONTENT_TYPE=" + request->getContentType()).c_str());
 		e[8] = strdup("GATEWAY_INTERFACE=CGI/1.1");
 		e[9] = NULL;
-
-		std::ofstream cgi_file("logs/Cgi_env_variables.txt", std::ios::app);
-		for (size_t j = 0; e[j] != NULL; j++)
-		{
-			cgi_file << e[j];
-			// std::cout << e[j] << std::endl;
-		}
 
 		close(pfd1[1]);
 		dup2(pfd1[0], STDIN_FILENO);

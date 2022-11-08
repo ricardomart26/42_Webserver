@@ -51,11 +51,13 @@ std::string	LocationHandler::findRoot()
 		return (_sbRoot + _path); 
 	}
 	else
+	{
+		std::cout << "\n\t@LOCATION ROOT: " << _location->dir<Root>("root")->getValue() << "\n\n";
+		std::cout << "\n\t@FINAL PATH: " << _path << "\n\n";
 		return (_location->dir<Root>("root")->getValue() + _path);
+	}
 
 
-	std::cout << "\n\t@LOCATION ROOT: " << _location->dir<Root>("root")->getValue() << "\n\n";
-	std::cout << "\n\t@FINAL PATH: " << _path << "\n\n";
 }
 
 void	LocationHandler::checkIfDir()
