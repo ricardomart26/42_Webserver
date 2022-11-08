@@ -4,19 +4,18 @@
 #define REDIRECT_STATUS "REDIRECT_STATUS=200" // Ou CGI??
 
 Response::Response(Request *request, int client_socket, size_t status_code, ServerBlock *sb) 
-	: _clientSocket(client_socket), _queue(_WRITE_SIZE), _file(_WRITE_SIZE), _status_code(status_code), _sb(sb)
+	: _clientSocket(client_socket), _queue(_WRITE_SIZE), _file(_WRITE_SIZE), _status_code(status_code), _sb(sb), _path(request->getPath())
 {
 	try {
-		_locationHandler = new LocationHandler(_sb, request->getPath());
-		_locationHandler->init();
-		_locationHandler->getLocationRoot();
+		_locationHandler = new LocationHandler(_sb, _path);
+		_locationHandler->findLocationBlock();
+		_path = _locationHandler->findRoot();
 		
-		// Ver qual é a ordem para procurar o index, o location ou o sb primeiro?
-		if (_locationHandler->getPath()[_locationHandler->getPath().size() - 1] == '/')
-			_locationHandler->searchForFiles(_sb->dir<Index>("index")->getValue(), _sb->getAutoIndex());
+		// No caso do url acabar com um '/'
+		_locationHandler->checkIfDir();
+
 		_path = _locationHandler->getPath();
-		std::cout << "Path is: " << std::endl;
-		_file.open(request->getPath());
+		_file.open(_path);
 	} catch (int err) {
 		std::cout << "error is: " << err << std::endl;
 		_status_code = (size_t)err;

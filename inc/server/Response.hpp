@@ -51,7 +51,7 @@ class Response {
 		unsigned short _status_code;
 		ServerBlock *_sb;
 		LocationHandler	*_locationHandler;
-
+		std::string	_path;
 };
 
 #endif

@@ -6,7 +6,7 @@ LocationHandler::LocationHandler(ServerBlock *sb, std::string &path)
 	_locationVec = _sb->getLocation();
 	_location = NULL;
 
-	_path = &path;
+	_path = path;
 }
 
 LocationHandler::~LocationHandler() {}
@@ -16,16 +16,16 @@ LocationHandler::~LocationHandler() {}
  * @brief Init will compare url endpoint (e.g. https://[domain name]:[port]/[url endpoint]), and compare with 
  * 
 */
-void	LocationHandler::init()
+void	LocationHandler::findLocationBlock()
 {
 	size_t i = 0;
-	std::cout << "Path is: " << *_path << std::endl;
+	std::cout << "Path is: " << _path << std::endl;
 	// Search in location prefix for the best match for request path
 	for (; i < _locationVec.size(); i++)
 	{
 		std::cout << "Options are: " << _locationVec[i]->dir<Root>("root")->getValue() << std::endl;
 			
-		if (!_locationVec[i]->getPrefix().compare(*_path) || !_locationVec[i]->getPrefix().compare("/"))
+		if (!_locationVec[i]->getPrefix().compare(_path) || !_locationVec[i]->getPrefix().compare("/"))
 		{
 			_location = _locationVec[i];
 			std::cout << "\nLocation found: " <<  _location->getPrefix() << "\n\n";
@@ -36,15 +36,9 @@ void	LocationHandler::init()
 	throw 404;
 	// What happens if nginx doest find the location
 	// sendHttpError(404);
-
-	// std::cout << "DEBUG::: LocationHandler::init()\n\n\tOption found: " << ((_location == NULL) ? "NULL" : _location->getPrefix()) << "\n\n";
-	// std::cout << "DEBUG::: LocationHandler::init()\n\n\tPath is: " << *_path << "\n\n";
-	// std::cout << "DEBUG::: i: " << i << _locationVec.size() - 1 << "\n\n";
-
-
 }
 
-void	LocationHandler::getLocationRoot()
+std::string	LocationHandler::findRoot()
 {
 	// std::cout << _location->dir<Root>("root")->getValue() << std::endl;
 	if (_location->dir<Root>("root")->getValue().empty())
@@ -54,37 +48,32 @@ void	LocationHandler::getLocationRoot()
 			// Send error because it doesn't have a folder to look for files
 			error_and_exit("LocationHandler::getLocationRoot root not found");
 		} 
-		*_path = _sbRoot + *_path; 
+		return (_sbRoot + _path); 
 	}
 	else
-		*_path = _location->dir<Root>("root")->getValue() + *_path;
-		
+		return (_location->dir<Root>("root")->getValue() + _path);
+
+
 	std::cout << "\n\t@LOCATION ROOT: " << _location->dir<Root>("root")->getValue() << "\n\n";
-	
-	std::cout << "\n\t@FINAL PATH: " << *_path << "\n\n";
+	std::cout << "\n\t@FINAL PATH: " << _path << "\n\n";
 }
 
-std::string	LocationHandler::searchForPathWithIndex(const std::vector<std::string> &indexVec)
+void	LocationHandler::checkIfDir()
 {
-	for (size_t i = 0; i < indexVec.size(); i++)
-	{
-		if (fileExists(*_path + indexVec[i]))
-			return (*_path += indexVec[i]);
-	}
-	return ("");
-}
+	if (_path[_path.size() - 1] != '/')
+		return ;
 
-void	LocationHandler::searchForFiles(const std::vector<std::string> &sb_indexVec, bool auto_index)
-{
-	std::string new_path;
+	const std::vector<std::string> indexVec = _sb->dir<Index>("index")->getValue(); 
+	bool autoIndex = _sb->getAutoIndex();
+	std::string	new_path;
 
 	new_path = searchForPathWithIndex(_location->getIndex());
 	if (new_path.empty())
 	{
-		new_path = searchForPathWithIndex(sb_indexVec);
+		new_path = searchForPathWithIndex(indexVec);
 		if (new_path.empty())
 		{
-			if (auto_index == true)
+			if (autoIndex == true)
 			{
 				// Do autoindex page
 			}
@@ -95,7 +84,17 @@ void	LocationHandler::searchForFiles(const std::vector<std::string> &sb_indexVec
 			}
 		}
 	}
-	*_path = new_path;
+	_path = new_path;
+}
+
+std::string	LocationHandler::searchForPathWithIndex(const std::vector<std::string> &indexVec)
+{
+	for (size_t i = 0; i < indexVec.size(); i++)
+	{
+		if (fileExists(_path + indexVec[i]))
+			return (_path += indexVec[i]);
+	}
+	return ("");
 }
 
 bool	LocationHandler::emptyLocation() const
@@ -105,5 +104,5 @@ bool	LocationHandler::emptyLocation() const
 
 std::string	&LocationHandler::getPath()
 {
-	return (*_path);
+	return (_path);
 }
