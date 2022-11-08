@@ -39,7 +39,6 @@ class Response {
 		
 		std::map<std::string, std::string>	_map;
 		std::string							_body;
-		string	_path;
 		int		_clientSocket;
 		string	_contentLength;
 		string	_contentType;

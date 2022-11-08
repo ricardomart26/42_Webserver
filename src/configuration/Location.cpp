@@ -27,7 +27,7 @@ Location::Location(const std::string &block, std::map<std::string, Directives*> 
 	
 		if (sliced.empty())
 			break ;
-		end_delimiter = SPACES;
+		end_delimiter = std::string(SPACES + std::string(";"));
 		if (sliced == "limit_except")
 			end_delimiter = "}";
 		_m[sliced]->action(slice_str(_content, end_delimiter, ++i), LOCATION);
@@ -38,7 +38,6 @@ Location::~Location() {}
 
 Location::Location(const Location &cpy)
 {
-	exit(3);
 	_prefix = cpy._prefix;
 	_m = cpy._m;
 	_index = cpy._index;
@@ -49,7 +48,6 @@ const Location &Location::operator=(const Location &rhs)
 {
 	if (this == &rhs)
 	{
-		exit(2);
 		this->_prefix = rhs._prefix;
 
 		std::map<std::string, Directives*>::const_iterator it = rhs._m.begin();
